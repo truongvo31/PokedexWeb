@@ -1,1 +1,6 @@
 @import 'tailwindcss';
+
+:root,
+:host {
+  --header-height: 3rem;
+}

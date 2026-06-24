@@ -1,38 +1,23 @@
-import { Button, FluentProvider, webDarkTheme, webLightTheme } from '@fluentui/react-components';
+import { FluentProvider, webDarkTheme, webLightTheme } from '@fluentui/react-components';
+import { useEffect } from 'react';
+import { useRoutes } from 'react-router-dom';
+import { routes } from './routes';
 import { useSystemTheme } from './stores/effects/useSystemTheme';
 import { useGlobalState } from './stores/useGlobalState';
 
 function App() {
-  const { theme, setTheme, setLang } = useGlobalState();
+  const { theme } = useGlobalState();
   const systemTheme = useSystemTheme();
   const actualTheme = theme === 'system' ? systemTheme : theme;
+
+  useEffect(() => {
+    document.documentElement.style.colorScheme = actualTheme;
+  }, [actualTheme]);
+
+  const appRoutes = useRoutes(routes);
   return (
     <FluentProvider theme={actualTheme === 'dark' ? webDarkTheme : webLightTheme}>
-      <div className="flex flex-col h-dvh w-dvw items-center justify-center gap-2">
-        <div className="flex gap-2">
-          <Button appearance="primary" onClick={() => setTheme('light')}>
-            Light
-          </Button>
-          <Button appearance="primary" onClick={() => setTheme('dark')}>
-            Dark
-          </Button>
-          <Button appearance="primary" onClick={() => setTheme('system')}>
-            System
-          </Button>
-        </div>
-        <div className="flex gap-2">
-          <Button appearance="primary" onClick={() => setLang('en')}>
-            Lang En
-          </Button>
-          <Button appearance="primary" onClick={() => setLang('ja')}>
-            Lang Ja
-          </Button>
-          <Button appearance="primary" onClick={() => setLang('vi')}>
-            Lang Vi
-          </Button>
-        </div>
-        <span>This is the test</span>
-      </div>
+      {appRoutes}
     </FluentProvider>
   );
 }
