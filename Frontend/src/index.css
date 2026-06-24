@@ -4,3 +4,9 @@
 :host {
   --header-height: 3rem;
 }
+
+.app-sidebar [data-tabster] {
+  padding-top: 0 !important;
+  padding-bottom: 0 !important;
+  padding-right: 0 !important;
+}
