@@ -5,11 +5,7 @@ import api from '../../helpers/apiHelper';
 export default function Pokemons() {
   const { t } = useTranslation();
 
-  const {
-    data: pokemons,
-    isLoading,
-    error,
-  } = useQuery<any>({
+  const { data: pokemons } = useQuery<any>({
     queryKey: ['pokemons'],
     queryFn: async () => {
       const { error, message, data } = await api.$get<any>('pokemon');
