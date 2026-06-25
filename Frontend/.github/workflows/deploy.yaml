@@ -2,7 +2,7 @@ name: Deploy Frontend to GitHub Pages
 
 on:
   push:
-    branches: [ main ]
+    branches: [main]
   workflow_dispatch:
 
 permissions:
@@ -18,23 +18,23 @@ jobs:
 
       - uses: actions/setup-node@v4
         with:
-          node-version: 20
+          node-version: 26
 
       - run: corepack enable
 
       # Move into the Frontend folder
       - name: Install dependencies
-        working-directory: ./Frontend
+        working-directory: ./
         run: pnpm install
 
       - name: Build Frontend
-        working-directory: ./Frontend
+        working-directory: ./
         run: pnpm build
 
       # Upload ONLY the Frontend build output
       - uses: actions/upload-pages-artifact@v3
         with:
-          path: ./Frontend/dist   # or ./Frontend/build if CRA
+          path: ./dist
 
   deploy:
     runs-on: ubuntu-latest
