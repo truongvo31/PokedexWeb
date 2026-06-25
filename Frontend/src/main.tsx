@@ -9,11 +9,13 @@ import './plugins/i18n.ts';
 import { queryClient } from './plugins/queryClient';
 import { GlobalProvider } from './stores/useGlobalState.tsx';
 
+const base = import.meta.env.BASE_URL;
+
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
     <GlobalProvider>
       <HtmlLangSync />
-      <BrowserRouter basename="/PokedexWeb">
+      <BrowserRouter basename={base}>
         <QueryClientProvider client={queryClient}>
           <App />
         </QueryClientProvider>
