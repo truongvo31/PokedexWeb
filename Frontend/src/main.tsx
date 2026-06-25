@@ -13,7 +13,7 @@ createRoot(document.getElementById('root')!).render(
   <StrictMode>
     <GlobalProvider>
       <HtmlLangSync />
-      <BrowserRouter>
+      <BrowserRouter basename="/PokedexWeb">
         <QueryClientProvider client={queryClient}>
           <App />
         </QueryClientProvider>
