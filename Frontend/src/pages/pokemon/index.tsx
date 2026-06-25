@@ -1,35 +1,27 @@
-import { Button } from '@fluentui/react-components';
+import { useQuery } from '@tanstack/react-query';
 import { useTranslation } from 'react-i18next';
-import { useGlobalState } from '../../stores/useGlobalState';
+import api from '../../helpers/apiHelper';
 
 export default function Pokemons() {
-  const { setTheme, setLang } = useGlobalState();
   const { t } = useTranslation();
+
+  const {
+    data: pokemons,
+    isLoading,
+    error,
+  } = useQuery<any>({
+    queryKey: ['pokemons'],
+    queryFn: async () => {
+      const { error, message, data } = await api.$get<any>('pokemon');
+      if (error) throw new Error(message);
+      return data!;
+    },
+  });
+
+  console.log('pokemons', pokemons);
 
   return (
     <div className="flex flex-col items-center justify-center gap-2">
-      <div className="flex gap-2">
-        <Button appearance="primary" onClick={() => setTheme('light')}>
-          Light
-        </Button>
-        <Button appearance="primary" onClick={() => setTheme('dark')}>
-          Dark
-        </Button>
-        <Button appearance="primary" onClick={() => setTheme('system')}>
-          System
-        </Button>
-      </div>
-      <div className="flex gap-2">
-        <Button appearance="primary" onClick={() => setLang('en')}>
-          Lang En
-        </Button>
-        <Button appearance="primary" onClick={() => setLang('ja')}>
-          Lang Ja
-        </Button>
-        <Button appearance="primary" onClick={() => setLang('vi')}>
-          Lang Vi
-        </Button>
-      </div>
       <p>{t('welcome')}</p>
       <p>{t('greeting', { name: 'Phong' })}</p>
     </div>

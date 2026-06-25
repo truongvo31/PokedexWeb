@@ -11,7 +11,7 @@ const STORAGE_KEY = 'app:global';
 const persisted = loadState<GlobalState>(STORAGE_KEY);
 
 const initialState: GlobalState = {
-  theme: 'light',
+  theme: 'system',
   lang: 'en',
   ...persisted, // override defaults if stored
 };

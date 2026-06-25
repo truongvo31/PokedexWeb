@@ -2,7 +2,7 @@ import { FluentProvider, webDarkTheme, webLightTheme } from '@fluentui/react-com
 import { useEffect } from 'react';
 import { useRoutes } from 'react-router-dom';
 import { useSystemTheme } from './effects/useSystemTheme';
-import { routes } from './routes';
+import { routes } from './plugins/routes';
 import { useGlobalState } from './stores/useGlobalState';
 
 function App() {

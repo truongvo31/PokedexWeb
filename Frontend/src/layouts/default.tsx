@@ -1,6 +1,7 @@
 import {
   Button,
   Hamburger,
+  Image,
   Popover,
   PopoverSurface,
   PopoverTrigger,
@@ -12,7 +13,6 @@ import { Nav } from '../components/ui/nav';
 import SettingsPopover from '../components/ui/settings';
 import { useBreakpoint } from '../stores/useBreakpoint';
 
-const AppTitle = 'Pokedex';
 const SettingIcon = bundleIcon(Settings24Filled, Settings24Regular);
 
 export default function DefaultLayout() {
@@ -36,7 +36,7 @@ export default function DefaultLayout() {
         <div className="flex h-full items-center justify-between px-4">
           <div id="layout_header_left" className="flex gap-2 items-center">
             <Hamburger onClick={() => setOpen((prev) => !prev)} />
-            {AppTitle}
+            <Image alt="Logo" src="./logo.png" className="h-8" loading="lazy" />
           </div>
           <div id="layout_header_right" className="flex gap-2 items-center">
             <Popover>
@@ -51,12 +51,7 @@ export default function DefaultLayout() {
         </div>
       </header>
       <main className="flex h-[calc(100dvh-var(--header-height))]">
-        <Nav
-          open={open}
-          overlay={!md}
-          headerText={AppTitle}
-          onToggle={async () => setOpen((prev) => !prev)}
-        />
+        <Nav open={open} overlay={!md} onToggle={async () => setOpen((prev) => !prev)} />
         <div className="h-full flex-1 overflow-auto rounded p-2">
           <Outlet />
         </div>
