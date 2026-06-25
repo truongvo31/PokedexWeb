@@ -24,17 +24,17 @@ jobs:
 
       # Move into the Frontend folder
       - name: Install dependencies
-        working-directory: ./
+        working-directory: ./Frontend
         run: pnpm install
 
       - name: Build Frontend
-        working-directory: ./
+        working-directory: ./Frontend
         run: pnpm build
 
       # Upload ONLY the Frontend build output
       - uses: actions/upload-pages-artifact@v3
         with:
-          path: ./dist
+          path: ./Frontend/dist
 
   deploy:
     runs-on: ubuntu-latest
