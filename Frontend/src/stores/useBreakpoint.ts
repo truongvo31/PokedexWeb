@@ -1,4 +1,4 @@
-import { useMediaQuery } from './effects/useMediaQuery';
+import { useMediaQuery } from '../effects/useMediaQuery';
 
 export function useBreakpoint() {
   return {

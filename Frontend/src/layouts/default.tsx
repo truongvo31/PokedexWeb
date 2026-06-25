@@ -1,10 +1,19 @@
-import { Hamburger } from '@fluentui/react-components';
+import {
+  Button,
+  Hamburger,
+  Popover,
+  PopoverSurface,
+  PopoverTrigger,
+} from '@fluentui/react-components';
+import { Settings24Filled, Settings24Regular, bundleIcon } from '@fluentui/react-icons';
 import { useEffect, useState } from 'react';
 import { Outlet, useLocation } from 'react-router-dom';
 import { Nav } from '../components/ui/nav';
+import SettingsPopover from '../components/ui/settings';
 import { useBreakpoint } from '../stores/useBreakpoint';
 
 const AppTitle = 'Pokedex';
+const SettingIcon = bundleIcon(Settings24Filled, Settings24Regular);
 
 export default function DefaultLayout() {
   const { md } = useBreakpoint();
@@ -28,6 +37,16 @@ export default function DefaultLayout() {
           <div id="layout_header_left" className="flex gap-2 items-center">
             <Hamburger onClick={() => setOpen((prev) => !prev)} />
             {AppTitle}
+          </div>
+          <div id="layout_header_right" className="flex gap-2 items-center">
+            <Popover>
+              <PopoverTrigger disableButtonEnhancement>
+                <Button icon={<SettingIcon />} appearance="transparent" />
+              </PopoverTrigger>
+              <PopoverSurface tabIndex={-1} className="settings-popover">
+                <SettingsPopover />
+              </PopoverSurface>
+            </Popover>
           </div>
         </div>
       </header>

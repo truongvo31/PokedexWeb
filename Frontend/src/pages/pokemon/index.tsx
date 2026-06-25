@@ -1,8 +1,11 @@
 import { Button } from '@fluentui/react-components';
+import { useTranslation } from 'react-i18next';
 import { useGlobalState } from '../../stores/useGlobalState';
 
 export default function Pokemons() {
   const { setTheme, setLang } = useGlobalState();
+  const { t } = useTranslation();
+
   return (
     <div className="flex flex-col items-center justify-center gap-2">
       <div className="flex gap-2">
@@ -27,10 +30,8 @@ export default function Pokemons() {
           Lang Vi
         </Button>
       </div>
-
-      {Array.from({ length: 200 }, (_, i) => (
-        <div key={i}>This is the test</div>
-      ))}
+      <p>{t('welcome')}</p>
+      <p>{t('greeting', { name: 'Phong' })}</p>
     </div>
   );
 }
