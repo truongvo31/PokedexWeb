@@ -25,7 +25,7 @@ namespace PokedexWeb.Dtos
 
     public class PokemonDtoMin : PokemonBasicDto
     {
-        public string[] ElementTypes { get; set; } = [];
+        public string[] Types { get; set; } = [];
     }
 
     public class PokemonNextPrev

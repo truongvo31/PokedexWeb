@@ -10,13 +10,16 @@ builder.Services.AddControllers();
 
 builder.Services.AddCors(options =>
 {
-    options.AddPolicy("AllowedCors", policy =>
+    options.AddPolicy("AllowedDev", policy =>
     {
         policy.WithOrigins("http://localhost:3000")
             .AllowAnyHeader()
             .AllowAnyMethod()
             .AllowCredentials();
+    });
 
+    options.AddPolicy("AllowedProd", policy =>
+    {
         policy.WithOrigins("https://truongvo31.github.io")
             .AllowAnyHeader()
             .AllowAnyMethod()
@@ -36,7 +39,11 @@ var app = builder.Build();
 
 // Configure the HTTP request pipeline.
 
-app.UseCors("AllowedCors");
+app.UseCors("AllowedProd");
+
+#if DEBUG
+app.UseCors("AllowedDev");
+#endif
 
 app.UseHttpsRedirection();
 
@@ -54,6 +61,7 @@ app.MapFallback(context =>
     }
 
     // Otherwise return SPA index.html
+    context.Response.ContentType = "text/html";
     return context.Response.SendFileAsync("wwwroot/index.html");
 });
 

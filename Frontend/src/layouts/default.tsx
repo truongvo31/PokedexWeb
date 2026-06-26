@@ -52,7 +52,7 @@ export default function DefaultLayout() {
       </header>
       <main className="flex h-[calc(100dvh-var(--header-height))]">
         <Nav open={open} overlay={!md} onToggle={async () => setOpen((prev) => !prev)} />
-        <div className="h-full flex-1 overflow-auto rounded p-2">
+        <div className="h-full flex-1 overflow-auto">
           <Outlet />
         </div>
       </main>

@@ -16,13 +16,12 @@ namespace PokedexWeb.Services
 
         public async Task<List<PokemonDtoMin>> GetAllAsync()
         {
-            
             var pokemons = await _dbContext.Pokemons.AsNoTracking()
                 .Select(x => new PokemonDtoMin
                 {
                     Id = x.Id,
                     Name = PokemonHelper.ToDisplayName(x.Name),
-                    ElementTypes = x.Pokemontypes.Select(t => t.Type)
+                    Types = x.Pokemontypes.Select(t => t.Type)
                         .Select(t => PokemonHelper.ToDisplayName(t!.Name)).ToArray(),
                 })
                 .ToListAsync();
@@ -31,8 +30,6 @@ namespace PokedexWeb.Services
 
         public async Task<PokemonDto> GetPokemonInfoAsync(int id)
         {
-            
-
             var allStatsForStat = await _dbContext.Pokemonstats
                 .AsNoTracking()
                 .GroupBy(s => s.StatId)
@@ -88,8 +85,6 @@ namespace PokedexWeb.Services
 
         public async Task<PokemonNextPrev> GetNextPrevPokemonsAsync(int id)
         {
-            
-
             var prevTask = _dbContext.Pokemons.AsNoTracking()
                 .Where(p => p.Id < id).OrderByDescending(p => p.Id).Select(x => new PokemonDtoMin
                 {
@@ -115,7 +110,6 @@ namespace PokedexWeb.Services
 
         public async Task<List<PokemonDtoMin>> GetEvolutionChainAsync(int pokemonId)
         {
-            
             var species = await _dbContext.Pokemonspecies.AsNoTracking()
                 .Where(ps =>
                     ps.EvolutionChainId == _dbContext.Pokemonspecies.Where(ps2 =>
@@ -126,7 +120,7 @@ namespace PokedexWeb.Services
                 {
                     Id = p.Id,
                     Name = PokemonHelper.ToDisplayName(p.Name),
-                    ElementTypes = p.Pokemontypes.Select(t => t.Type)
+                    Types = p.Pokemontypes.Select(t => t.Type)
                         .Select(t => PokemonHelper.ToDisplayName(t!.Name)).ToArray(),
                 }).OrderBy(p => p.Id))
                 .ToListAsync();
@@ -135,7 +129,6 @@ namespace PokedexWeb.Services
 
         public async Task<List<PokemonTypeEfficacyDto>> GetTypeEfficaciesAsync(int id)
         {
-            
             var pokemonTypeIds = await _dbContext.Pokemons.AsNoTracking()
                 .Where(x => x.Id == id).SelectMany(x => x.Pokemontypes.Select(t => t.TypeId!.Value)).ToArrayAsync();
             // Load all type efficacy rows that target any of the defender's types
@@ -167,7 +160,6 @@ namespace PokedexWeb.Services
 
         public async Task<List<PokemonBasicDto>> GetAvailableGenerationsAsync(int id)
         {
-            
             var res = await _dbContext.Generations.AsNoTracking()
                 .Where(g => g.Id >=
                     _dbContext.Pokemonforms.Where(pf => pf.PokemonId == id)

@@ -37,10 +37,14 @@ const request = async <T>(
   timeout: number,
 ): Promise<ApiResponse<T>> => {
   try {
-    const baseURL = import.meta.env.VITE_API_URL;
-    // const baseURL = 'https://pokedex-backend-bjdzgedpagcrhrb7.japanwest-01.azurewebsites.net/api';
+    let baseURL = import.meta.env.VITE_API_URL as string | undefined;
+    // let baseURL = 'https://pokedex-backend-bjdzgedpagcrhrb7.japanwest-01.azurewebsites.net/api';
     if (!baseURL) {
       throw new Error('VITE_API_URL is not defined in the environment variables');
+    }
+    baseURL = baseURL.trim();
+    if (!/(^|\/)api\/?([?#].*)?$/i.test(baseURL)) {
+      baseURL = baseURL.replace(/\/+$/, '') + '/api';
     }
     const fullURL = joinURL(baseURL, url);
     const controller = new AbortController();
