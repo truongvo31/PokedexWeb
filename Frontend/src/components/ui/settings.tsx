@@ -1,4 +1,4 @@
-import { Divider, ToggleButton } from '@fluentui/react-components';
+import { ToggleButton } from '@fluentui/react-components';
 import {
   Laptop16Filled,
   Laptop16Regular,
@@ -15,7 +15,7 @@ const DarkIcon = bundleIcon(WeatherMoon16Filled, WeatherMoon16Regular);
 const SystemIcon = bundleIcon(Laptop16Filled, Laptop16Regular);
 
 const SettingsPopover = () => {
-  const { theme, setTheme, lang, setLang } = useGlobalState();
+  const { theme, setTheme } = useGlobalState();
 
   return (
     <div className="flex flex-col gap-2 p-4">
@@ -49,7 +49,7 @@ const SettingsPopover = () => {
           System
         </ToggleButton>
       </div>
-      <Divider />
+      {/* <Divider />
       <p className="text-xs">Languages</p>
       <div className="flex gap-2">
         <ToggleButton
@@ -76,7 +76,7 @@ const SettingsPopover = () => {
         >
           Vietnamese
         </ToggleButton>
-      </div>
+      </div> */}
     </div>
   );
 };

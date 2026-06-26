@@ -2,7 +2,7 @@ import { Input } from '@fluentui/react-components';
 import { bundleIcon, Search20Filled, Search20Regular } from '@fluentui/react-icons';
 import { useQuery } from '@tanstack/react-query';
 import { useState } from 'react';
-import PokemonGrid from '../../components/ui/pokemonGrid';
+import PokemonGrid from '../../components/ui/pokemon/pokemonGrid';
 import api from '../../helpers/apiHelper';
 import { debounce } from '../../helpers/utilsHelper';
 import type { PokemonDto } from '../../types/pokemon';
