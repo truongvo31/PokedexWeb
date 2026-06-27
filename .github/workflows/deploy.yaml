@@ -31,6 +31,9 @@ jobs:
         working-directory: ./Frontend
         run: pnpm build
 
+      - name: Create 404.html for SPA routing
+        run: cp ./Frontend/dist/index.html ./Frontend/dist/404.html
+
       # Upload ONLY the Frontend build output
       - uses: actions/upload-pages-artifact@v3
         with:
