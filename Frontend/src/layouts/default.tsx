@@ -16,13 +16,13 @@ import { useBreakpoint } from '../stores/useBreakpoint';
 const SettingIcon = bundleIcon(Settings24Filled, Settings24Regular);
 
 export default function DefaultLayout() {
-  const { md } = useBreakpoint();
+  const { md, lg } = useBreakpoint();
   const [open, setOpen] = useState(md);
   const location = useLocation();
 
   useEffect(() => {
-    setOpen(md);
-  }, [md]);
+    setOpen(lg);
+  }, [lg]);
 
   useEffect(() => {
     if (!md) {

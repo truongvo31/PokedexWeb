@@ -1,5 +1,5 @@
 import { Image } from '@fluentui/react-components';
-import { useState } from 'react';
+import { useState, type JSX } from 'react';
 import { Link } from 'react-router-dom';
 import type { PokemonBasicDto } from '../../../types/pokemon';
 
@@ -38,14 +38,28 @@ const PokemonTypeBadge = ({ type, clickable }: PokemonTypeBadgeProps) => {
     .catch((err) => console.error('SVG not found', err));
   const link = clickable ? `/type/${type.id}` : '';
 
+  let returnItem: JSX.Element | null = null;
+  if (clickable) {
+    returnItem = (
+      <Link
+        to={link}
+        className={`px-2 py-1.5 flex items-center rounded text-white text-xs font-semibold ${colorClass}`}
+      >
+        <Image src={svgPath} alt={type.name} width={14} height={14} className="inline-block mr-1" />
+        {type.name}
+      </Link>
+    );
+  }
+
   return (
-    <Link
-      to={link}
-      className={`px-2 py-1.5 flex items-center rounded text-white text-xs font-semibold ${colorClass}`}
-    >
-      <Image src={svgPath} alt={type.name} width={14} height={14} className="inline-block mr-1" />
-      {type.name}
-    </Link>
+    returnItem || (
+      <div
+        className={`px-2 py-1.5 flex items-center rounded text-white text-xs font-semibold ${colorClass}`}
+      >
+        <Image src={svgPath} alt={type.name} width={14} height={14} className="inline-block mr-1" />
+        {type.name}
+      </div>
+    )
   );
 };
 
