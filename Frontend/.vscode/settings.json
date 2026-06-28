@@ -47,7 +47,7 @@
   "editor.quickSuggestions": {
     "strings": "on"
   },
-  "tailwindCSS.classAttributes": ["class", "ui"],
+  "tailwindCSS.classAttributes": ["class", "ui", "className", "ngClass", "tw", "cx"],
   "tailwindCSS.classFunctions": ["defineAppConfig"],
 
   // ===== Terminal =====

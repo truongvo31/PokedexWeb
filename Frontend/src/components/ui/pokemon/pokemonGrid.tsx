@@ -1,6 +1,6 @@
 import { useVirtualizer } from '@tanstack/react-virtual';
-import { useElementSize } from '../../effects/useElementSize';
-import type { PokemonDtoMin } from '../../types/pokemon';
+import { useElementSize } from '../../../effects/useElementSize';
+import type { PokemonDtoMin } from '../../../types/pokemon';
 import PokemonCard from './pokemonCard';
 
 type PokemonGridProps = {
@@ -18,7 +18,6 @@ const PokemonGrid = ({ pokemons, options, className }: PokemonGridProps) => {
   const gap = options.gap;
   const itemHeight = options.itemHeight;
   const rows = Math.ceil((pokemons?.length ?? 0) / lanes);
-  console.log(pokemons);
 
   const virtualizer = useVirtualizer({
     count: rows,

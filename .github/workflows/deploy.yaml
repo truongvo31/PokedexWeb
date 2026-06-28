@@ -18,7 +18,7 @@ jobs:
 
       - uses: actions/setup-node@v4
         with:
-          node-version: 26
+          node-version: 24
 
       - run: corepack enable
 
@@ -30,6 +30,9 @@ jobs:
       - name: Build Frontend
         working-directory: ./Frontend
         run: pnpm build
+
+      - name: Create 404.html for SPA routing
+        run: cp ./Frontend/dist/index.html ./Frontend/dist/404.html
 
       # Upload ONLY the Frontend build output
       - uses: actions/upload-pages-artifact@v3

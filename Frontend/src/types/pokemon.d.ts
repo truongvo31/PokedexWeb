@@ -17,4 +17,9 @@ export type PokemonBasicDto = {
   name: string;
 };
 
+export type PokemonNextPrev = {
+  prev?: PokemonBasicDto;
+  next?: PokemonBasicDto;
+};
+
 export type PokemonDtoMin = Pick<PokemonDto, 'id' | 'name' | 'types'>;
