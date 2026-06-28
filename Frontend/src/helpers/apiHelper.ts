@@ -54,6 +54,9 @@ const request = async <T>(
       headers: {
         ...(options.body ? { 'Content-Type': 'application/json' } : {}),
         ...(options.headers || {}),
+        ...(import.meta.env.VITE_DEV_ACCESS_KEY
+          ? { 'X-Dev-Access-Key': import.meta.env.VITE_DEV_ACCESS_KEY }
+          : {}),
       },
       body:
         options.body && typeof options.body === 'object'

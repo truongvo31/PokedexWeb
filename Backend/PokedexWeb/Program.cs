@@ -10,17 +10,9 @@ builder.Services.AddControllers();
 
 builder.Services.AddCors(options =>
 {
-    options.AddPolicy("AllowedDev", policy =>
+    options.AddPolicy("AllowedFrontend", policy =>
     {
-        policy.WithOrigins("http://localhost:3000")
-            .AllowAnyHeader()
-            .AllowAnyMethod()
-            .AllowCredentials();
-    });
-
-    options.AddPolicy("AllowedProd", policy =>
-    {
-        policy.WithOrigins("https://truongvo31.github.io")
+        policy.WithOrigins("http://localhost:3000", "https://truongvo31.github.io")
             .AllowAnyHeader()
             .AllowAnyMethod()
             .AllowCredentials();
@@ -39,11 +31,38 @@ var app = builder.Build();
 
 // Configure the HTTP request pipeline.
 
-app.UseCors("AllowedProd");
+app.UseCors("AllowedFrontend");
 
-#if DEBUG
-app.UseCors("AllowedDev");
-#endif
+
+app.Use(async (context, next) =>
+{
+    var config = context.RequestServices.GetRequiredService<IConfiguration>();
+    var env = context.RequestServices.GetRequiredService<IWebHostEnvironment>();
+
+    var allowLocalFrontend =
+        config.GetValue<bool>("AllowLocalFrontendInRelease");
+
+    if (!env.IsDevelopment() && allowLocalFrontend)
+    {
+        var origin = context.Request.Headers.Origin.ToString();
+
+        if (origin == "http://localhost:3000")
+        {
+            var expectedKey = config["DevFrontendAccessKey"];
+            var actualKey = context.Request.Headers["X-Dev-Access-Key"].ToString();
+
+            if (string.IsNullOrWhiteSpace(expectedKey) ||
+                actualKey != expectedKey)
+            {
+                context.Response.StatusCode = StatusCodes.Status403Forbidden;
+                await context.Response.WriteAsync("Forbidden.");
+                return;
+            }
+        }
+    }
+
+    await next();
+});
 
 app.UseHttpsRedirection();
 
