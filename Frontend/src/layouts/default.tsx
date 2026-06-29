@@ -9,6 +9,7 @@ import {
 import { Settings24Filled, Settings24Regular, bundleIcon } from '@fluentui/react-icons';
 import { useEffect, useState } from 'react';
 import { Outlet, useLocation } from 'react-router-dom';
+import Logo from '../assets/logo.png';
 import { Nav } from '../components/ui/nav';
 import SettingsPopover from '../components/ui/settings';
 import { useBreakpoint } from '../stores/useBreakpoint';
@@ -36,7 +37,7 @@ export default function DefaultLayout() {
         <div className="flex h-full items-center justify-between px-4">
           <div id="layout_header_left" className="flex gap-2 items-center">
             <Hamburger onClick={() => setOpen((prev) => !prev)} />
-            <Image alt="Logo" src="./logo.png" className="h-8" loading="lazy" />
+            <Image alt="Logo" src={Logo} className="h-8" loading="lazy" />
           </div>
           <div id="layout_header_right" className="flex gap-2 items-center">
             <Popover>
