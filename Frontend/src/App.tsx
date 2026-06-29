@@ -1,9 +1,11 @@
 import { FluentProvider, webDarkTheme, webLightTheme } from '@fluentui/react-components';
 import { useEffect } from 'react';
 import { useRoutes } from 'react-router-dom';
+import { GlobalLoadingOverlay } from './components/ui/loading';
 import { useSystemTheme } from './effects/useSystemTheme';
 import { routes } from './plugins/routes';
 import { useGlobalState } from './stores/useGlobalState';
+import { LoadingProvider } from './stores/useLoading';
 
 function App() {
   const { theme } = useGlobalState();
@@ -18,7 +20,10 @@ function App() {
   const appRoutes = useRoutes(routes);
   return (
     <FluentProvider theme={actualTheme === 'dark' ? webDarkTheme : webLightTheme}>
-      {appRoutes}
+      <LoadingProvider>
+        {appRoutes}
+        <GlobalLoadingOverlay />
+      </LoadingProvider>
     </FluentProvider>
   );
 }

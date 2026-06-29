@@ -1,17 +1,19 @@
 import { Input } from '@fluentui/react-components';
 import { bundleIcon, Search20Filled, Search20Regular } from '@fluentui/react-icons';
 import { useQuery } from '@tanstack/react-query';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import PokemonGrid from '../../components/ui/pokemon/pokemonGrid';
 import api from '../../helpers/apiHelper';
 import { debounce } from '../../helpers/utilsHelper';
+import { useLoading } from '../../stores/useLoading';
 import type { PokemonDto } from '../../types/pokemon';
 
 const SearchIcon = bundleIcon(Search20Filled, Search20Regular);
 
 export default function Pokemons() {
+  const { setLoading } = useLoading();
   const [filteredPokemons, setFilteredPokemons] = useState<PokemonDto[]>([]);
-  const { data: pokemons } = useQuery<PokemonDto[]>({
+  const { data: pokemons, isLoading } = useQuery<PokemonDto[]>({
     queryKey: ['pokemons'],
     queryFn: async () => {
       const { error, message, data } = await api.$get<PokemonDto[]>('pokemon');
@@ -19,6 +21,10 @@ export default function Pokemons() {
       return data!;
     },
   });
+
+  useEffect(() => {
+    setLoading(isLoading, isLoading ? 'Loading Pokemons...' : undefined);
+  }, [isLoading]);
 
   const searchDebounce = debounce((keyword) => {
     if (pokemons) {
