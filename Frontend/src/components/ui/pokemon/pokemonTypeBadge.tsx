@@ -26,20 +26,19 @@ export const typeColors: Record<string, string> = {
 
 type PokemonTypeBadgeProps = {
   type: PokemonBasicDto;
-  clickable?: boolean;
+  link?: string;
 };
 
-const PokemonTypeBadge = ({ type, clickable }: PokemonTypeBadgeProps) => {
+const PokemonTypeBadge = ({ type, link }: PokemonTypeBadgeProps) => {
   const colorClass = typeColors[type.name.toLowerCase()] || 'bg-gray-500';
   const [svgPath, setSvgPath] = useState(undefined);
 
-  import(`../../../assets/${type.name.toLowerCase()}.svg`)
+  import(`../../../assets/types/${type.name.toLowerCase()}.svg`)
     .then((image) => setSvgPath(image.default))
     .catch((err) => console.error('SVG not found', err));
-  const link = clickable ? `/type/${type.id}` : '';
 
   let returnItem: JSX.Element | null = null;
-  if (clickable) {
+  if (link) {
     returnItem = (
       <Link
         to={link}

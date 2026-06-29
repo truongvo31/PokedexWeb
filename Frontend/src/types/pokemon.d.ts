@@ -12,6 +12,12 @@ export type PokemonDto = PokemonBasicDto & {
   generations: PokemonBasicDto[];
 };
 
+export type PokemonDtoStat = PokemonBasicDto & {
+  value: number;
+  betterThan: number;
+  allPokemonsCount: number;
+};
+
 export type PokemonBasicDto = {
   id: number;
   name: string;

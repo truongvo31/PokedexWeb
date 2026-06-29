@@ -1,6 +1,8 @@
 import { Card, CardFooter, CardPreview, Image } from '@fluentui/react-components';
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
+import FallbackAsset from '../../../assets/placeholder.webp';
+import { resolveAssets } from '../../../helpers/pokemonHelper';
 import type { PokemonDtoMin } from '../../../types/pokemon';
 import PokemonTypeBadge from './pokemonTypeBadge';
 
@@ -8,14 +10,6 @@ type PokemonCardProps = {
   pokemon: PokemonDtoMin;
   height?: number;
 };
-
-export const resolveAssets = (id: number): string => {
-  const idStr = id.toString().padStart(5, '0');
-  const baseUrl = import.meta.env.VITE_ASSETS_URL;
-  return `${baseUrl}pokemons/${idStr}.png`;
-};
-
-const fallbackAsset = `${import.meta.env.VITE_ASSETS_URL}pokemons/placeholder.png`;
 
 const PokemonCard = ({ pokemon, height }: PokemonCardProps) => {
   const [showImg, setShowImg] = useState(false);
@@ -44,7 +38,7 @@ const PokemonCard = ({ pokemon, height }: PokemonCardProps) => {
               alt={pokemon.name}
               loading="lazy"
               fit="contain"
-              onError={(e) => (e.currentTarget.src = fallbackAsset)}
+              onError={(e) => (e.currentTarget.src = FallbackAsset)}
             />
           )}
         </CardPreview>

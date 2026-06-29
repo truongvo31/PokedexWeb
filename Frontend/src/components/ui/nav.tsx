@@ -8,7 +8,9 @@ import {
   Tooltip,
 } from '@fluentui/react-components';
 import { Link } from 'react-router-dom';
+import Logo from '../../assets/logo.png';
 import { routes, type AppRoute } from '../../plugins/routes';
+
 type Props = {
   open: boolean;
   overlay: boolean;
@@ -30,7 +32,7 @@ export const Nav = ({ open, overlay, onToggle }: Props) => {
         <Tooltip content="Close Navigation" relationship="label">
           <Hamburger onClick={onToggle} />
         </Tooltip>
-        <Image src="./logo.png" className="h-8" loading="lazy" />
+        <Image src={Logo} className="h-8" loading="lazy" />
       </NavDrawerHeader>
       <NavDrawerBody className="flex flex-col">
         {navItems.map((route) => {

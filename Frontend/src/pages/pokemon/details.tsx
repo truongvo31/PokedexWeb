@@ -8,8 +8,10 @@ import {
 } from '@fluentui/react-icons';
 import { useQuery } from '@tanstack/react-query';
 import { Link, useParams } from 'react-router-dom';
-import { resolveAssets } from '../../components/ui/pokemon/pokemonCard';
+import PokemonInfo from '../../components/ui/pokemon/pokemonInfo';
+import PokemonStats from '../../components/ui/pokemon/pokemonStats';
 import api from '../../helpers/apiHelper';
+import { resolveAssets } from '../../helpers/pokemonHelper';
 import type { PokemonDto, PokemonNextPrev } from '../../types/pokemon';
 
 const PrevIcon = bundleIcon(PreviousFrame20Filled, Previous20Regular);
@@ -40,13 +42,13 @@ const PokemonDetails = () => {
 
   return (
     <div className="flex flex-col h-full">
-      <div className="px-8 py-2 flex items-center justify-between shadow">
+      <div className="px-8 py-2 grid grid-cols-1 md:grid-cols-[1fr_auto] gap-2 items-center">
         <nav>
           <Link to="/">Pokemons</Link>
           <span className="mx-2">/</span>
           <span className="text-gray-400">{data?.pokemon.name}</span>
         </nav>
-        <div className="flex items-center gap-2">
+        <div className="flex gap-2 justify-center">
           {data?.adjacent.prev && (
             <Link to={`/pokemon/${data.adjacent.prev.id}`}>
               <Button className="gap-2" icon={<PrevIcon />}>
@@ -77,11 +79,13 @@ const PokemonDetails = () => {
       </div>
       <div className="px-8 flex-1 overflow-auto">
         <div className="grid gap-2 grid-cols-1 md:grid-cols-3 xl:grid-cols-[2fr_3fr_2fr]">
-          <div className="order-2 md:order-1">Info here</div>
+          <div className="order-2 md:order-1">
+            {data?.pokemon && <PokemonInfo pokemon={data.pokemon} />}
+          </div>
           <div className="order-1 md:order-2 flex items-center justify-center">
             <Image src={resolveAssets(pokemonId)} alt="Pokemon" loading="lazy" className="w-100" />
           </div>
-          <div className="order-3">Stats here</div>
+          <div className="order-3">{data?.pokemon && <PokemonStats pokemon={data.pokemon} />}</div>
         </div>
       </div>
     </div>

@@ -3,6 +3,7 @@ import { createContext, type ReactNode, useCallback, useContext, useMemo, useSta
 type LoadingContextValue = {
   isLoading: boolean;
   message?: string;
+  setMessage: (message?: string) => void;
   showLoading: (message?: string) => void;
   hideLoading: () => void;
   setLoading: (value: boolean, message?: string) => void;
@@ -17,9 +18,10 @@ type LoadingProviderProps = {
 
 export function LoadingProvider({ children }: LoadingProviderProps) {
   const [loadingCount, setLoadingCount] = useState(0);
+  const [externalLoading, setExternalLoadingState] = useState(false);
   const [message, setMessage] = useState<string | undefined>();
 
-  const isLoading = loadingCount > 0;
+  const isLoading = loadingCount > 0 || externalLoading;
 
   const showLoading = useCallback((nextMessage?: string) => {
     setMessage(nextMessage);
@@ -31,15 +33,17 @@ export function LoadingProvider({ children }: LoadingProviderProps) {
     setMessage(undefined);
   }, []);
 
-  const setLoading = useCallback((value: boolean, nextMessage?: string) => {
-    if (value) {
-      setLoadingCount((count) => count + 1);
-      setMessage(nextMessage);
-      return;
-    }
-    setLoadingCount((count) => Math.max(0, count - 1));
-    setMessage(undefined);
-  }, []);
+  const setLoading = useCallback(
+    (value: boolean, nextMessage?: string) => {
+      setExternalLoadingState(value);
+      if (value) {
+        setMessage(nextMessage);
+      } else if (loadingCount === 0) {
+        setMessage(undefined);
+      }
+    },
+    [loadingCount],
+  );
 
   const withLoading = useCallback(
     async <T,>(asyncFunction: () => Promise<T>, nextMessage?: string): Promise<T> => {
@@ -61,8 +65,9 @@ export function LoadingProvider({ children }: LoadingProviderProps) {
       hideLoading,
       setLoading,
       withLoading,
+      setMessage,
     }),
-    [isLoading, message, showLoading, hideLoading, setLoading, withLoading],
+    [isLoading, message, showLoading, hideLoading, setLoading, withLoading, setMessage],
   );
 
   return <LoadingContext.Provider value={value}>{children}</LoadingContext.Provider>;
