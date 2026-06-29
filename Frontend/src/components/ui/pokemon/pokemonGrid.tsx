@@ -10,9 +10,10 @@ type PokemonGridProps = {
     itemHeight: number;
   };
   className?: string;
+  selected?: number;
 };
 
-const PokemonGrid = ({ pokemons, options, className }: PokemonGridProps) => {
+const PokemonGrid = ({ pokemons, options, className, selected }: PokemonGridProps) => {
   const { ref, width } = useElementSize();
   const lanes = Math.max(1, Math.floor(width / 200));
   const gap = options.gap;
@@ -49,7 +50,12 @@ const PokemonGrid = ({ pokemons, options, className }: PokemonGridProps) => {
               }}
             >
               {rowItems.map((pokemon) => (
-                <PokemonCard key={pokemon.id} pokemon={pokemon} height={itemHeight - gap} />
+                <PokemonCard
+                  key={pokemon.id}
+                  pokemon={pokemon}
+                  height={itemHeight - gap}
+                  selected={selected === pokemon.id}
+                />
               ))}
             </div>
           );

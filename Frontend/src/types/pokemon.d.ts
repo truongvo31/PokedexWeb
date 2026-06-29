@@ -29,3 +29,8 @@ export type PokemonNextPrev = {
 };
 
 export type PokemonDtoMin = Pick<PokemonDto, 'id' | 'name' | 'types'>;
+
+export type PokemonTypeEfficacyDto = {
+  multiplier: string;
+  types: PokemonBasicDto[];
+};

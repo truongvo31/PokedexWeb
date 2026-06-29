@@ -7,12 +7,21 @@ import {
   bundleIcon,
 } from '@fluentui/react-icons';
 import { useQuery } from '@tanstack/react-query';
+import { useEffect } from 'react';
 import { Link, useParams } from 'react-router-dom';
+import PokemonEvolutionChain from '../../components/ui/pokemon/pokemonEvolutionChain';
 import PokemonInfo from '../../components/ui/pokemon/pokemonInfo';
 import PokemonStats from '../../components/ui/pokemon/pokemonStats';
+import PokemonTypeEfficacy from '../../components/ui/pokemon/pokemonTypeEfficacy';
 import api from '../../helpers/apiHelper';
 import { resolveAssets } from '../../helpers/pokemonHelper';
-import type { PokemonDto, PokemonNextPrev } from '../../types/pokemon';
+import { useLoading } from '../../stores/useLoading';
+import type {
+  PokemonDto,
+  PokemonDtoMin,
+  PokemonNextPrev,
+  PokemonTypeEfficacyDto,
+} from '../../types/pokemon';
 
 const PrevIcon = bundleIcon(PreviousFrame20Filled, Previous20Regular);
 const NextIcon = bundleIcon(NextFrame20Filled, NextFrame20Regular);
@@ -20,23 +29,35 @@ const NextIcon = bundleIcon(NextFrame20Filled, NextFrame20Regular);
 type QueryData = {
   pokemon: PokemonDto;
   adjacent: PokemonNextPrev;
+  evolutionChain: PokemonDtoMin[];
+  typeEfficacy: PokemonTypeEfficacyDto[];
 };
 
 const PokemonDetails = () => {
   const { id } = useParams<{ id: string }>();
-  const { data } = useQuery<QueryData>({
+  const { setLoading } = useLoading();
+  const { data, isLoading } = useQuery<QueryData>({
     queryKey: ['pokemons', id],
     queryFn: async () => {
-      const [pokemonRequest, adjacentRequest] = await Promise.all([
-        api.$get<PokemonDto>(`pokemon/${id}`),
-        api.$get<PokemonNextPrev>(`pokemon/${id}/next_prev`),
-      ]);
+      const [pokemonRequest, adjacentRequest, evolutionChainRequest, typeEfficacyRequest] =
+        await Promise.all([
+          api.$get<PokemonDto>(`pokemon/${id}`),
+          api.$get<PokemonNextPrev>(`pokemon/${id}/next_prev`),
+          api.$get<PokemonDtoMin[]>(`pokemon/${id}/evolution_chain`),
+          api.$get<PokemonTypeEfficacyDto[]>(`pokemon/${id}/type_efficacies`),
+        ]);
       return {
-        pokemon: pokemonRequest.data!,
-        adjacent: adjacentRequest.data!,
+        pokemon: pokemonRequest.data ?? ({} as PokemonDto),
+        adjacent: adjacentRequest.data ?? ({} as PokemonNextPrev),
+        evolutionChain: evolutionChainRequest.data ?? [],
+        typeEfficacy: typeEfficacyRequest.data ?? [],
       };
     },
   });
+
+  useEffect(() => {
+    setLoading(isLoading);
+  }, [isLoading, setLoading]);
 
   const pokemonId = parseInt(id || '0', 10);
 
@@ -87,6 +108,10 @@ const PokemonDetails = () => {
           </div>
           <div className="order-3">{data?.pokemon && <PokemonStats pokemon={data.pokemon} />}</div>
         </div>
+
+        <PokemonEvolutionChain pokemons={data?.evolutionChain || []} id={pokemonId} />
+
+        <PokemonTypeEfficacy typeEfficacy={data?.typeEfficacy || []} />
       </div>
     </div>
   );

@@ -32,6 +32,9 @@ const PokemonStats = ({ pokemon }: { pokemon: PokemonDto }) => {
             <ProgressBar value={stat.betterThan} max={stat.allPokemonsCount} thickness="large" />
           </Fragment>
         ))}
+
+        <Text align="start">Total :</Text>
+        <Text>{pokemon.stats.reduce((acc, stat) => acc + stat.value, 0)}</Text>
       </div>
     </div>
   );

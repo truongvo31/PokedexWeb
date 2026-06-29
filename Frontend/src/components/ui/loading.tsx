@@ -1,4 +1,4 @@
-import { Spinner } from '@fluentui/react-components';
+import { Spinner, tokens } from '@fluentui/react-components';
 import { getSystemTheme } from '../../helpers/themeHelper';
 import { useGlobalState } from '../../stores/useGlobalState';
 import { useLoading } from '../../stores/useLoading';
@@ -14,7 +14,8 @@ export function GlobalLoadingOverlay() {
 
   return (
     <div
-      className="fixed inset-0 z-999 flex items-center justify-center backdrop-blur-md"
+      className="fixed inset-0 flex items-center justify-center backdrop-blur-md"
+      style={{ zIndex: tokens.zIndexOverlay }}
       role="alert"
       aria-live="assertive"
       aria-busy="true"

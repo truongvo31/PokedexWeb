@@ -9,9 +9,10 @@ import PokemonTypeBadge from './pokemonTypeBadge';
 type PokemonCardProps = {
   pokemon: PokemonDtoMin;
   height?: number;
+  selected?: boolean;
 };
 
-const PokemonCard = ({ pokemon, height }: PokemonCardProps) => {
+const PokemonCard = ({ pokemon, height, selected }: PokemonCardProps) => {
   const [showImg, setShowImg] = useState(false);
 
   useEffect(() => {
@@ -24,13 +25,20 @@ const PokemonCard = ({ pokemon, height }: PokemonCardProps) => {
     name: type.toString(),
   }));
 
+  const hoverClass = selected
+    ? ''
+    : 'w-full ' +
+      `border border-(--colorNeutralStroke2) ` +
+      'transition-all duration-200 ' +
+      'hover:shadow-lg hover:-translate-y-1 hover:scale-[1.02] ' +
+      'hover:border-(--colorCompoundBrandForeground1) hover:border-2 ' +
+      'hover:cursor-pointer';
+
+  const selectedClass = selected ? 'border-2 border-(--colorCompoundBrandForeground1)' : '';
+
   return (
     <Link to={`/pokemon/${pokemon.id}`}>
-      <Card
-        className="w-full border border-(--colorNeutralStroke2) transition-all duration-200 hover:shadow-lg hover:-translate-y-1 hover:scale-[1.02] hover:border-(--colorCompoundBrandForeground1) hover:border-2 hover:cursor-pointer"
-        style={{ height }}
-        key={pokemon.id}
-      >
+      <Card className={`${hoverClass} ${selectedClass}`} style={{ height }} key={pokemon.id}>
         <CardPreview className="h-[70%] p-2">
           {showImg && (
             <Image
@@ -46,9 +54,6 @@ const PokemonCard = ({ pokemon, height }: PokemonCardProps) => {
           {pokemon.name}
           <div className="flex gap-2 items-center justify-center w-full">
             {normalizedTypes.map((type, index) => (
-              // <div key={index} className="text-sm font-medium">
-              //   {type.toString()}
-              // </div>
               <PokemonTypeBadge key={index} type={type} />
             ))}
           </div>

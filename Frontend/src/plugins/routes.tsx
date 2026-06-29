@@ -1,5 +1,5 @@
 import type { Slot } from '@fluentui/react-components';
-import { type RouteObject } from 'react-router-dom';
+import { Outlet, type RouteObject } from 'react-router-dom';
 import Error from '../Error';
 import DefaultLayout from '../layouts/default';
 import Pokemons from '../pages/pokemon/index';
@@ -13,6 +13,7 @@ import {
   bundleIcon,
 } from '@fluentui/react-icons';
 import PokemonDetails from '../pages/pokemon/details';
+import TypeDetails from '../pages/type/details';
 
 const Dashboard = bundleIcon(Board20Filled, Board20Regular);
 const FireIcon = bundleIcon(Fire24Filled, Fire20Regular);
@@ -34,7 +35,6 @@ export const routes: AppRoute[] = [
       {
         index: true,
         element: <Pokemons />,
-        handle: { breadcrumb: 'Pokemons' },
         nav: { label: 'Pokemons', icon: <Dashboard />, value: 'pokemons' },
       },
       {
@@ -42,13 +42,23 @@ export const routes: AppRoute[] = [
         element: <PokemonDetails />,
       },
       {
-        path: 'types',
-        element: <Types />,
+        path: 'type',
+        element: <Outlet />,
         nav: {
           label: 'Types',
           icon: <FireIcon />,
           value: 'types',
         },
+        children: [
+          {
+            index: true,
+            element: <Types />,
+          },
+          {
+            path: ':typeId',
+            element: <TypeDetails />,
+          },
+        ],
       },
     ],
   },
