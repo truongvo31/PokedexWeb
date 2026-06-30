@@ -6,6 +6,8 @@ import {
   TableHeader,
   TableHeaderCell,
   TableRow,
+  makeStyles,
+  tokens,
 } from '@fluentui/react-components';
 import type { PokemonBasicDto, PokemonTypeEfficacyDto } from '../../../types/pokemon';
 import PokemonTypeBadge from './pokemonTypeBadge';
@@ -13,7 +15,7 @@ import PokemonTypeBadge from './pokemonTypeBadge';
 const columns: { key: keyof PokemonTypeEfficacyDto; label: string; className?: string }[] = [
   {
     key: 'multiplier',
-    label: 'Multiplier',
+    label: 'Dmg',
     className: 'w-1/8',
   },
   {
@@ -23,9 +25,17 @@ const columns: { key: keyof PokemonTypeEfficacyDto; label: string; className?: s
   },
 ];
 
+const useFluentStyles = makeStyles({
+  card: {
+    backgroundColor: tokens.colorNeutralBackground3,
+    borderRadius: tokens.borderRadiusXLarge,
+  },
+});
+
 const PokemonTypeEfficacy = ({ typeEfficacy }: { typeEfficacy: PokemonTypeEfficacyDto[] }) => {
+  const fluentStyle = useFluentStyles();
   return (
-    <div className="flex flex-col gap-2">
+    <div className={`flex flex-col gap-2 p-2 ${fluentStyle.card}`}>
       <Divider>Type Efficacy</Divider>
       <Table aria-label="Type Efficacy Table">
         <TableHeader>
@@ -45,7 +55,7 @@ const PokemonTypeEfficacy = ({ typeEfficacy }: { typeEfficacy: PokemonTypeEffica
                   {typeof efficacy[column.key] === 'string' ? (
                     efficacy[column.key]
                   ) : (
-                    <div className="flex flex-wrap gap-2">
+                    <div className="flex flex-wrap gap-2 p-2">
                       {(efficacy[column.key] as PokemonBasicDto[]).map((type) => (
                         <PokemonTypeBadge key={type.id} type={type} link={`/type/${type.id}`} />
                       ))}

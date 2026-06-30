@@ -1,4 +1,4 @@
-import { Button, Image } from '@fluentui/react-components';
+import { Button, Image, makeStyles, tokens } from '@fluentui/react-components';
 import {
   NextFrame20Filled,
   NextFrame20Regular,
@@ -11,6 +11,7 @@ import { useEffect } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import PokemonEvolutionChain from '../../components/ui/pokemon/pokemonEvolutionChain';
 import PokemonInfo from '../../components/ui/pokemon/pokemonInfo';
+import PokemonMiscellaneous from '../../components/ui/pokemon/pokemonMiscellaneous';
 import PokemonStats from '../../components/ui/pokemon/pokemonStats';
 import PokemonTypeEfficacy from '../../components/ui/pokemon/pokemonTypeEfficacy';
 import api from '../../helpers/apiHelper';
@@ -33,6 +34,13 @@ type QueryData = {
   typeEfficacy: PokemonTypeEfficacyDto[];
 };
 
+const useFluentStyles = makeStyles({
+  card: {
+    backgroundColor: tokens.colorNeutralBackground3,
+    borderRadius: tokens.borderRadiusXLarge,
+  },
+});
+
 const PokemonDetails = () => {
   const { id } = useParams<{ id: string }>();
   const { setLoading } = useLoading();
@@ -54,6 +62,7 @@ const PokemonDetails = () => {
       };
     },
   });
+  const fluentStyle = useFluentStyles();
 
   useEffect(() => {
     setLoading(isLoading);
@@ -63,7 +72,7 @@ const PokemonDetails = () => {
 
   return (
     <div className="flex flex-col h-full">
-      <div className="px-8 py-2 grid grid-cols-1 md:grid-cols-[1fr_auto] gap-2 items-center">
+      <div className="px-4 md:px-6 lg:px-8 py-2 grid grid-cols-1 md:grid-cols-[1fr_auto] gap-2 items-center">
         <nav>
           <Link to="/">Pokemons</Link>
           <span className="mx-2">/</span>
@@ -77,7 +86,7 @@ const PokemonDetails = () => {
                   src={resolveAssets(data.adjacent.prev.id)}
                   alt="Pokemon"
                   loading="lazy"
-                  className="w-5 h-5"
+                  className="size-5"
                 />
                 {data.adjacent.prev.name}
               </Button>
@@ -91,15 +100,17 @@ const PokemonDetails = () => {
                   src={resolveAssets(data.adjacent.next.id)}
                   alt="Pokemon"
                   loading="lazy"
-                  className="w-5 h-5"
+                  className="size-5"
                 />
               </Button>
             </Link>
           )}
         </div>
       </div>
-      <div className="px-8 flex-1 overflow-auto">
-        <div className="grid gap-2 grid-cols-1 md:grid-cols-3 xl:grid-cols-[2fr_3fr_2fr]">
+      <div className="px-4 md:px-6 lg:px-8 flex-1 overflow-auto flex flex-col gap-2">
+        <div
+          className={`grid gap-2 grid-cols-1 md:grid-cols-3 xl:grid-cols-[2fr_3fr_2fr] ${fluentStyle.card} p-2`}
+        >
           <div className="order-2 md:order-1">
             {data?.pokemon && <PokemonInfo pokemon={data.pokemon} />}
           </div>
@@ -111,7 +122,10 @@ const PokemonDetails = () => {
 
         <PokemonEvolutionChain pokemons={data?.evolutionChain || []} id={pokemonId} />
 
-        <PokemonTypeEfficacy typeEfficacy={data?.typeEfficacy || []} />
+        <div className="grid gap-2 grid-cols-1 md:grid-cols-[2fr_1fr]">
+          <PokemonTypeEfficacy typeEfficacy={data?.typeEfficacy || []} />
+          {data?.pokemon && <PokemonMiscellaneous pokemon={data.pokemon} />}
+        </div>
       </div>
     </div>
   );

@@ -1,4 +1,11 @@
-import { Card, CardFooter, CardPreview, Image } from '@fluentui/react-components';
+import {
+  Card,
+  CardFooter,
+  CardPreview,
+  Image,
+  makeStyles,
+  tokens,
+} from '@fluentui/react-components';
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import FallbackAsset from '../../../assets/placeholder.webp';
@@ -12,8 +19,20 @@ type PokemonCardProps = {
   selected?: boolean;
 };
 
+const useFluentStyles = makeStyles({
+  card: {
+    backgroundColor: tokens.colorNeutralCardBackground,
+    borderRadius: tokens.borderRadiusMedium,
+    ':hover': {
+      backgroundColor: tokens.colorNeutralCardBackgroundHover,
+      border: `2px solid ${tokens.colorCompoundBrandForeground1}`,
+    },
+  },
+});
+
 const PokemonCard = ({ pokemon, height, selected }: PokemonCardProps) => {
   const [showImg, setShowImg] = useState(false);
+  const fluentStyles = useFluentStyles();
 
   useEffect(() => {
     const t = setTimeout(() => setShowImg(true), 100);
@@ -28,17 +47,21 @@ const PokemonCard = ({ pokemon, height, selected }: PokemonCardProps) => {
   const hoverClass = selected
     ? ''
     : 'w-full ' +
-      `border border-(--colorNeutralStroke2) ` +
+      // `border border-(--colorNeutralStroke2) ` +
       'transition-all duration-200 ' +
       'hover:shadow-lg hover:-translate-y-1 hover:scale-[1.02] ' +
-      'hover:border-(--colorCompoundBrandForeground1) hover:border-2 ' +
+      // 'hover:border-(--colorCompoundBrandForeground1) hover:border-2 ' +
       'hover:cursor-pointer';
 
   const selectedClass = selected ? 'border-2 border-(--colorCompoundBrandForeground1)' : '';
 
   return (
     <Link to={`/pokemon/${pokemon.id}`}>
-      <Card className={`${hoverClass} ${selectedClass}`} style={{ height }} key={pokemon.id}>
+      <Card
+        className={`${hoverClass} ${selectedClass} ${fluentStyles.card}`}
+        style={{ height }}
+        key={pokemon.id}
+      >
         <CardPreview className="h-[70%] p-2">
           {showImg && (
             <Image

@@ -13,6 +13,7 @@ import {
   bundleIcon,
 } from '@fluentui/react-icons';
 import PokemonDetails from '../pages/pokemon/details';
+import PokemonEncounters from '../pages/pokemon/encounters';
 import TypeDetails from '../pages/type/details';
 
 const Dashboard = bundleIcon(Board20Filled, Board20Regular);
@@ -39,7 +40,17 @@ export const routes: AppRoute[] = [
       },
       {
         path: 'pokemon/:id',
-        element: <PokemonDetails />,
+        element: <Outlet />,
+        children: [
+          {
+            index: true,
+            element: <PokemonDetails />,
+          },
+          {
+            path: 'encounters',
+            element: <PokemonEncounters />,
+          },
+        ],
       },
       {
         path: 'type',

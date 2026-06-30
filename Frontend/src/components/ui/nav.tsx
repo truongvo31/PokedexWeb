@@ -6,6 +6,8 @@ import {
   NavDrawerHeader,
   NavItem,
   Tooltip,
+  makeStyles,
+  tokens,
 } from '@fluentui/react-components';
 import { Link } from 'react-router-dom';
 import Logo from '../../assets/logo.png';
@@ -17,12 +19,21 @@ type Props = {
   onToggle: () => {};
 };
 
+const useFluentStyles = makeStyles({
+  sidebar: {
+    // backgroundColor: tokens.colorNeutralBackgroundAlpha2,
+    borderRight: `1px solid ${tokens.colorNeutralStroke2}`,
+  },
+});
+
 export const Nav = ({ open, overlay, onToggle }: Props) => {
   const navItems = routes[0].children?.filter((r: AppRoute) => r.nav) ?? [];
 
+  const fluentStyles = useFluentStyles();
+
   return (
     <NavDrawer
-      className="min-w-65 app-sidebar"
+      className={`min-w-65 app-sidebar shadow ${fluentStyles.sidebar}`}
       tabbable={false}
       open={open}
       type={overlay ? 'overlay' : 'inline'}

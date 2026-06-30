@@ -5,6 +5,8 @@ import {
   Popover,
   PopoverSurface,
   PopoverTrigger,
+  makeStyles,
+  tokens,
 } from '@fluentui/react-components';
 import { Settings24Filled, Settings24Regular, bundleIcon } from '@fluentui/react-icons';
 import { useEffect, useState } from 'react';
@@ -15,6 +17,13 @@ import SettingsPopover from '../components/ui/settings';
 import { useBreakpoint } from '../stores/useBreakpoint';
 
 const SettingIcon = bundleIcon(Settings24Filled, Settings24Regular);
+
+const useFluentStyles = makeStyles({
+  header: {
+    backgroundColor: tokens.colorNeutralBackground2,
+    borderBottom: `1px solid ${tokens.colorNeutralStroke2}`,
+  },
+});
 
 export default function DefaultLayout() {
   const { md, lg } = useBreakpoint();
@@ -31,9 +40,11 @@ export default function DefaultLayout() {
     }
   }, [location.pathname]);
 
+  const fluentStyles = useFluentStyles();
+
   return (
     <div>
-      <header className="h-(--header-height) bg-(--colorNeutralBackground4) border-b border-(--colorNeutralStroke2)">
+      <header className={fluentStyles.header + ' h-(--header-height)'}>
         <div className="flex h-full items-center justify-between px-4">
           <div id="layout_header_left" className="flex gap-2 items-center">
             <Hamburger onClick={() => setOpen((prev) => !prev)} />
