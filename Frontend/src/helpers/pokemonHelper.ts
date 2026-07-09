@@ -1,6 +1,6 @@
 export const resolveAssets = (id: number): string => {
   const idStr = id.toString().padStart(5, '0');
-  const baseUrl = import.meta.env.VITE_ASSETS_URL;
+  const baseUrl = import.meta.env.VITE_ASSETS_URL as string;
   return `${baseUrl}pokemons/${idStr}.webp`;
 };
 

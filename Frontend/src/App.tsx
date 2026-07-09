@@ -1,31 +1,35 @@
 import { FluentProvider, webDarkTheme, webLightTheme } from '@fluentui/react-components';
 import { useEffect } from 'react';
-import { useRoutes } from 'react-router-dom';
-import { GlobalLoadingOverlay } from './components/ui/loading';
-import { useSystemTheme } from './effects/useSystemTheme';
-import { routes } from './plugins/routes';
-import { useGlobalState } from './stores/useGlobalState';
-import { LoadingProvider } from './stores/useLoading';
+import { RouterProvider } from 'react-router-dom';
+import AsyncDialogProvider from './providers/dialogProvider';
+import LoadingProvider from './providers/loadingProvider';
+import routes from './routes';
+import useGlobalState from './stores/useGlobalState';
+import { HtmlLangSync } from './stores/useHtmlLangSync';
+import { useSystemTheme } from './stores/useSystemTheme';
 
-function App() {
+const App = () => {
   const { theme } = useGlobalState();
   const systemTheme = useSystemTheme();
 
   const actualTheme = theme === 'system' ? systemTheme : theme;
-
   useEffect(() => {
     document.documentElement.style.colorScheme = actualTheme;
   }, [actualTheme]);
 
-  const appRoutes = useRoutes(routes);
   return (
-    <FluentProvider theme={actualTheme === 'dark' ? webDarkTheme : webLightTheme}>
+    <FluentProvider
+      theme={actualTheme === 'dark' ? webDarkTheme : webLightTheme}
+      id="root-fluent-provider"
+    >
       <LoadingProvider>
-        {appRoutes}
-        <GlobalLoadingOverlay />
+        <AsyncDialogProvider>
+          <HtmlLangSync />
+          <RouterProvider router={routes} />
+        </AsyncDialogProvider>
       </LoadingProvider>
     </FluentProvider>
   );
-}
+};
 
 export default App;

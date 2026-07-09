@@ -34,7 +34,7 @@
     "**/components.d.ts": true
   },
 
-  // ===== Vue files =====
+  // ===== React files =====
   "[tsx]": {
     "editor.defaultFormatter": "esbenp.prettier-vscode",
     "editor.formatOnSave": true

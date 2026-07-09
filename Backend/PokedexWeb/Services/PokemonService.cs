@@ -9,20 +9,14 @@ namespace PokedexWeb.Services
     public class PokemonService
     {
         private readonly AppDbContext _dbContext;
-        private readonly IMemoryCache _cache;
         public PokemonService(AppDbContext dbContext, IMemoryCache cache)
         {
             _dbContext = dbContext;
-            _cache = cache;
         }
 
         public async Task<List<PokemonDtoMin>> GetAllAsync()
         {
-            var cacheKey = "all_pokemons";
-            var pokemons = await _cache.GetOrCreateAsync(cacheKey, async entry =>
-            {
-                entry.AbsoluteExpirationRelativeToNow = TimeSpan.FromHours(1);
-                return await _dbContext.Pokemons.AsNoTracking()
+            return await _dbContext.Pokemons.AsNoTracking()
                     .Select(x => new PokemonDtoMin
                     {
                         Id = x.Id,
@@ -32,18 +26,11 @@ namespace PokedexWeb.Services
                     })
                     .OrderBy(x => x.Id)
                     .ToListAsync();
-            });
-            return pokemons ?? [];
         }
 
         public async Task<PokemonDto> GetPokemonInfoAsync(int id)
         {
-            var cacheKey = $"pokemon_info_{id}";
-            var pokemon = await _cache.GetOrCreateAsync(cacheKey, async entry =>
-            {
-                entry.AbsoluteExpirationRelativeToNow = TimeSpan.FromMinutes(10);
-
-                var allStatsForStat = await _dbContext.Pokemonstats
+            var allStatsForStat = await _dbContext.Pokemonstats
                 .AsNoTracking()
                 .GroupBy(s => s.StatId)
                 .Select(g => new {
@@ -52,83 +39,72 @@ namespace PokedexWeb.Services
                 })
                 .ToDictionaryAsync(x => x.StatId!.Value, x => x.Values);
 
-                var allPokemonsCount = await _dbContext.Pokemons.AsNoTracking().CountAsync();
+            var allPokemonsCount = await _dbContext.Pokemons.AsNoTracking().CountAsync();
 
-                var item = await _dbContext.Pokemons.AsNoTracking()
-                    .Select(x => new PokemonDto
-                    {
-                        Id = x.Id,
-                        Name = PokemonHelper.ToDisplayName(x.Name),
-                        Height = x.Height ?? 0,
-                        Weight = x.Weight ?? 0,
-                        Title = x.PokemonSpecies!.Pokemonspeciesnames!.First(spn => spn.LanguageId == 9).Genus,
-                        IsLegendary = x.PokemonSpecies.IsLegendary,
-                        IsMythical = x.PokemonSpecies.IsMythical,
-                        CaptureRate = x.PokemonSpecies.CaptureRate!.Value,
-                        GenderRate = x.PokemonSpecies.GenderRate!.Value,
-                        Stats = x.Pokemonstats.Select(s => new PokemonDtoStat
-                        {
-                            Id = s.StatId!.Value,
-                            Name = PokemonHelper.ToDisplayName(s.Stat!.Name),
-                            Value = s.BaseStat,
-                            AllPokemonsCount = allPokemonsCount,
-                        }).ToList(),
-                        Types = x.Pokemontypes.Select(pt => pt.Type).Select(t => new PokemonBasicDto
-                        {
-                            Id = t!.Id,
-                            Name = PokemonHelper.ToDisplayName(t!.Name),
-                        }).ToList(),
-                        Abilities = x.Pokemonabilities.Select(pa => pa.Ability).Select(a => new PokemonBasicDto
-                        {
-                            Id = a!.Id,
-                            Name = PokemonHelper.ToDisplayName(a!.Name),
-                        }).ToList()
-                    }).SingleOrDefaultAsync(x => x.Id == id) ?? throw new Exception("Not a single pokemon found");
-
-                foreach (var stat in item.Stats)
+            var item = await _dbContext.Pokemons.AsNoTracking()
+                .Select(x => new PokemonDto
                 {
-                    var statList = allStatsForStat[stat.Id];
-                    stat.BetterThan = statList?.Count(x => x < stat.Value) ?? 0;
-                }
+                    Id = x.Id,
+                    Name = PokemonHelper.ToDisplayName(x.Name),
+                    Height = x.Height ?? 0,
+                    Weight = x.Weight ?? 0,
+                    Title = x.PokemonSpecies!.Pokemonspeciesnames!.First(spn => spn.LanguageId == 9).Genus,
+                    IsLegendary = x.PokemonSpecies.IsLegendary,
+                    IsMythical = x.PokemonSpecies.IsMythical,
+                    CaptureRate = x.PokemonSpecies.CaptureRate!.Value,
+                    GenderRate = x.PokemonSpecies.GenderRate!.Value,
+                    Stats = x.Pokemonstats.Select(s => new PokemonDtoStat
+                    {
+                        Id = s.StatId!.Value,
+                        Name = PokemonHelper.ToDisplayName(s.Stat!.Name),
+                        Value = s.BaseStat,
+                        AllPokemonsCount = allPokemonsCount,
+                    }).ToList(),
+                    Types = x.Pokemontypes.Select(pt => pt.Type).Select(t => new PokemonBasicDto
+                    {
+                        Id = t!.Id,
+                        Name = PokemonHelper.ToDisplayName(t!.Name),
+                    }).ToList(),
+                    Abilities = x.Pokemonabilities.Select(pa => pa.Ability).Select(a => new PokemonBasicDto
+                    {
+                        Id = a!.Id,
+                        Name = PokemonHelper.ToDisplayName(a!.Name),
+                    }).ToList()
+                }).SingleOrDefaultAsync(x => x.Id == id) ?? throw new Exception("Not a single pokemon found");
 
-                item.Generations = await GetAvailableGenerationsAsync(id);
-                return item;
-            });
+            foreach (var stat in item.Stats)
+            {
+                var statList = allStatsForStat[stat.Id];
+                stat.BetterThan = statList?.Count(x => x < stat.Value) ?? 0;
+            }
 
-            return pokemon ?? throw new Exception("Pokemon not found");
+            item.Generations = await GetAvailableGenerationsAsync(id);
+            return item;
         }
 
         public async Task<PokemonNextPrev> GetNextPrevPokemonsAsync(int id)
         {
-            var cacheKey = $"next_prev_pokemons_{id}";
-
-            var result = await _cache.GetOrCreateAsync(cacheKey, async entry =>
-            {
-                entry.AbsoluteExpirationRelativeToNow = TimeSpan.FromMinutes(10);
-                var prevTask = _dbContext.Pokemons.AsNoTracking()
+            var prevTask = _dbContext.Pokemons.AsNoTracking()
                 .Where(p => p.Id < id).OrderByDescending(p => p.Id).Select(x => new PokemonDtoMin
                 {
                     Id = x.Id,
                     Name = PokemonHelper.ToDisplayName(x.Name),
                 }).FirstOrDefaultAsync();
 
-                var nextTask = _dbContext.Pokemons.AsNoTracking()
-                    .Where(p => p.Id > id).OrderBy(p => p.Id).Select(x => new PokemonDtoMin
-                    {
-                        Id = x.Id,
-                        Name = PokemonHelper.ToDisplayName(x.Name),
-                    }).FirstOrDefaultAsync();
-
-                await Task.WhenAll(prevTask, nextTask);
-
-                return new PokemonNextPrev
+            var nextTask = _dbContext.Pokemons.AsNoTracking()
+                .Where(p => p.Id > id).OrderBy(p => p.Id).Select(x => new PokemonDtoMin
                 {
-                    Prev = await prevTask,
-                    Next = await nextTask
-                };
-            });
+                    Id = x.Id,
+                    Name = PokemonHelper.ToDisplayName(x.Name),
+                }).FirstOrDefaultAsync();
 
-            return result ?? throw new Exception("Could not fetch next/prev pokemons");
+            await Task.WhenAll(prevTask, nextTask);
+
+            return new PokemonNextPrev
+            {
+                Prev = await prevTask,
+                Next = await nextTask
+            };
         }
 
         public async Task<List<PokemonDtoMin>> GetEvolutionChainAsync(int pokemonId)
@@ -152,40 +128,33 @@ namespace PokedexWeb.Services
 
         public async Task<List<PokemonTypeEfficacyDto>> GetTypeEfficaciesAsync(int id)
         {
-            var cacheKey = $"type_efficacies_{id}";
-            var typeEfficacy = await _cache.GetOrCreateAsync(cacheKey, async entry =>
-            {
-                entry.AbsoluteExpirationRelativeToNow = TimeSpan.FromMinutes(10);
-                var pokemonTypeIds = await _dbContext.Pokemons.AsNoTracking()
+            var pokemonTypeIds = await _dbContext.Pokemons.AsNoTracking()
                 .Where(x => x.Id == id).SelectMany(x => x.Pokemontypes.Select(t => t.TypeId!.Value)).ToArrayAsync();
-                // Load all type efficacy rows that target any of the defender's types
-                var rows = await _dbContext.Typeefficacies.AsNoTracking()
-                    .Include(x => x.DamageType)
-                    .Where(e => e.TargetTypeId.HasValue && pokemonTypeIds.Contains(e.TargetTypeId.Value))
-                    .ToListAsync();
-                var result = rows
-                    .GroupBy(e => e.DamageTypeId!.Value)
-                    .Select(g => new
+            // Load all type efficacy rows that target any of the defender's types
+            var rows = await _dbContext.Typeefficacies.AsNoTracking()
+                .Include(x => x.DamageType)
+                .Where(e => e.TargetTypeId.HasValue && pokemonTypeIds.Contains(e.TargetTypeId.Value))
+                .ToListAsync();
+            var result = rows
+                .GroupBy(e => e.DamageTypeId!.Value)
+                .Select(g => new
+                {
+                    Type = new PokemonBasicDto
                     {
-                        Type = new PokemonBasicDto
-                        {
-                            Id = g.Key,
-                            Name = PokemonHelper.ToDisplayName(g.First().DamageType!.Name),
-                        },
-                        Multiplier = g.Aggregate(1.0, (mult, row) => mult * (row.DamageFactor / 100.0)),
-                    })
-                    .GroupBy(x => Math.Round(x.Multiplier, 2))
-                    .OrderBy(g => g.Key)
-                    .Select(g => new PokemonTypeEfficacyDto
-                    {
-                        Multiplier = $"{g.Key}x",
-                        Types = g.Select(x => x.Type).ToArray()
-                    })
-                    .ToList();
-                return result;
-            });
-            
-            return typeEfficacy ?? throw new Exception("Could not fetch Type efficacies");
+                        Id = g.Key,
+                        Name = PokemonHelper.ToDisplayName(g.First().DamageType!.Name),
+                    },
+                    Multiplier = g.Aggregate(1.0, (mult, row) => mult * (row.DamageFactor / 100.0)),
+                })
+                .GroupBy(x => Math.Round(x.Multiplier, 2))
+                .OrderBy(g => g.Key)
+                .Select(g => new PokemonTypeEfficacyDto
+                {
+                    Multiplier = $"{g.Key}x",
+                    Types = g.Select(x => x.Type).ToArray()
+                })
+                .ToList();
+            return result;
         }
 
         public async Task<List<PokemonBasicDto>> GetAvailableGenerationsAsync(int id)

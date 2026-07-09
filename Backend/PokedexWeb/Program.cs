@@ -28,6 +28,7 @@ builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseSqlite(connectionString).EnableSensitiveDataLogging());
 
 builder.Services.AddScoped<PokemonService>();
+builder.Services.AddScoped<TypeService>();
 
 var app = builder.Build();
 

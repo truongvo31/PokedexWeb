@@ -1,16 +1,21 @@
-export function loadState<T>(key: string): Partial<T> | null {
+export const loadState = <T>(key: string): Partial<T> | undefined => {
   try {
-    const raw = localStorage.getItem(key);
-    return raw ? JSON.parse(raw) : null;
-  } catch {
-    return null;
+    const serializedState = localStorage.getItem(key);
+    if (serializedState === null) {
+      return undefined;
+    }
+    return JSON.parse(serializedState) as Partial<T>;
+  } catch (err) {
+    console.error('Error loading state from localStorage', err);
+    return undefined;
   }
-}
+};
 
-export function saveState<T>(key: string, state: T) {
+export const saveState = <T>(key: string, state: T): void => {
   try {
-    localStorage.setItem(key, JSON.stringify(state));
-  } catch {
-    // ignore quota / private mode errors
+    const serializedState = JSON.stringify(state);
+    localStorage.setItem(key, serializedState);
+  } catch (err) {
+    console.error('Error saving state to localStorage', err);
   }
-}
+};
