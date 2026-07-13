@@ -39,7 +39,7 @@ const LayoutContent = () => {
       </nav>
       <main className="flex h-[calc(100dvh-var(--header-height))]">
         <AppSidebar />
-        <div className="flex-1">
+        <div className="flex-1 min-w-0">
           <Outlet />
           <ScrollRestoration />
         </div>

@@ -34,3 +34,38 @@ export type PokemonTypeEfficacyDto = {
   multiplier: string;
   types: PokemonBasicDto[];
 };
+
+export type EncounterDto = {
+  inGameEncounters: EncounterGameNode[];
+  specialEncounters: EncounterGameNode[];
+};
+
+export type EncounterBasicDto = {
+  id: number;
+  name: string;
+};
+
+export type EncounterVersionDto = EncounterBasicDto & {
+  versionGroupId: number;
+};
+
+export type EncounterGameNode = {
+  game: EncounterVersionDto;
+  locations: EncounterLocationNode[];
+};
+
+export type EncounterLocationNode = {
+  location: EncounterBasicDto;
+  methods: EncounterMethodNode[];
+};
+
+export type EncounterMethodNode = {
+  method: EncounterBasicDto;
+  methodDesc?: string;
+  conditions: EncounterConditionNode[];
+};
+
+export type EncounterConditionNode = {
+  condition?: string;
+  rarity: number;
+};

@@ -29,6 +29,7 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 
 builder.Services.AddScoped<PokemonService>();
 builder.Services.AddScoped<TypeService>();
+builder.Services.AddScoped<EncounterService>();
 
 var app = builder.Build();
 

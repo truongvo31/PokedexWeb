@@ -14,11 +14,14 @@ import { resolveAssets } from '../../helpers/pokemonHelper';
 import { saveStateToSession } from '../../helpers/storageHelper';
 import useLoading from '../../stores/useLoading';
 import type {
+  EncounterDto,
+  EncounterGameNode,
   PokemonDto,
   PokemonDtoMin,
   PokemonNextPrev,
   PokemonTypeEfficacyDto,
 } from '../../types/pokemon';
+import PokemonEncounters from './components/Encounters';
 import PokemonEvolutionChain from './components/EvolutionChain';
 import PokemonMiscellaneous from './components/Miscellaneous';
 import PokemonInfo from './components/PokemonInfo';
@@ -30,6 +33,7 @@ type QueryData = {
   adjacent: PokemonNextPrev;
   evolutionChain: PokemonDtoMin[];
   typeEfficacy: PokemonTypeEfficacyDto[];
+  encounters: EncounterGameNode[];
 };
 
 const useFluentStyles = makeStyles({
@@ -63,18 +67,25 @@ const PokemonDetailsPage = () => {
   const { data, isLoading } = useQuery<QueryData>({
     queryKey: ['pokemons', id],
     queryFn: async () => {
-      const [pokemonRequest, adjacentRequest, evolutionChainRequest, typeEfficacyRequest] =
-        await Promise.all([
-          api.$get<PokemonDto>(`pokemon/${id}`),
-          api.$get<PokemonNextPrev>(`pokemon/${id}/next_prev`),
-          api.$get<PokemonDtoMin[]>(`pokemon/${id}/evolution_chain`),
-          api.$get<PokemonTypeEfficacyDto[]>(`pokemon/${id}/type_efficacies`),
-        ]);
+      const [
+        pokemonRequest,
+        adjacentRequest,
+        evolutionChainRequest,
+        typeEfficacyRequest,
+        encountersRequest,
+      ] = await Promise.all([
+        api.$get<PokemonDto>(`pokemon/${id}`),
+        api.$get<PokemonNextPrev>(`pokemon/${id}/next_prev`),
+        api.$get<PokemonDtoMin[]>(`pokemon/${id}/evolution_chain`),
+        api.$get<PokemonTypeEfficacyDto[]>(`pokemon/${id}/type_efficacies`),
+        api.$get<EncounterDto>(`encounters/${id}`),
+      ]);
       return {
         pokemon: pokemonRequest.data ?? ({} as PokemonDto),
         adjacent: adjacentRequest.data ?? { next: undefined, prev: undefined },
         evolutionChain: evolutionChainRequest.data ?? [],
         typeEfficacy: typeEfficacyRequest.data ?? [],
+        encounters: encountersRequest.data?.inGameEncounters ?? [],
       };
     },
   });
@@ -149,6 +160,8 @@ const PokemonDetailsPage = () => {
             <PokemonTypeEfficacies typeEfficacy={data.typeEfficacy} />
             <PokemonMiscellaneous pokemon={data.pokemon} />
           </div>
+
+          <PokemonEncounters encounters={data.encounters} />
         </div>
       </div>
     )
