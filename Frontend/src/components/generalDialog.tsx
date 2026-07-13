@@ -12,13 +12,18 @@ type GeneralDialogProps = {
  * Must implement full `DialogBody` structure with `DialogTitle`, `DialogContent`, and `DialogActions` as children
  */
 const GeneralDialog = ({ children, trigger, unmountOnClose = true }: GeneralDialogProps) => {
+  const ready =
+    typeof window !== 'undefined' && document.getElementById('root-fluent-provider') != null;
+
   return (
-    <Dialog unmountOnClose={unmountOnClose}>
-      <DialogTrigger disableButtonEnhancement>{trigger}</DialogTrigger>
-      <DialogSurface mountNode={document.getElementById('root-fluent-provider') ?? undefined}>
-        {children}
-      </DialogSurface>
-    </Dialog>
+    ready && (
+      <Dialog unmountOnClose={unmountOnClose}>
+        <DialogTrigger disableButtonEnhancement>{trigger}</DialogTrigger>
+        <DialogSurface mountNode={document.getElementById('root-fluent-provider')}>
+          {children}
+        </DialogSurface>
+      </Dialog>
+    )
   );
 };
 

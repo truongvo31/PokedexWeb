@@ -14,14 +14,14 @@ import GeneralDialog from '../../../components/generalDialog';
 import { Capitalize } from '../../../helpers/stringHelper';
 import MultiselectWithValueString from './MultiselectWithValueString';
 
-type SubmitResult = {
+export type FilterResult = {
   searchName: string;
   searchRarity: ('legendary' | 'mythical')[];
   searchTypes: string[];
 };
 
 type HomeSearchButtonProps = {
-  onSubmit: (result: SubmitResult) => void;
+  onSubmit: (result: FilterResult) => void;
 };
 
 const types = [

@@ -3,16 +3,12 @@
   "WorkspaceRootPath": "C:\\Users\\71791860\\OneDrive - Hitachi Group\\\u30C7\u30B9\u30AF\u30C8\u30C3\u30D7\\Test\\Code\\PokedexWeb\\Backend\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{195D8347-7544-4089-BE90-DAFB061544C8}|PokedexWeb\\PokedexWeb.csproj|c:\\users\\71791860\\onedrive - hitachi group\\\u30C7\u30B9\u30AF\u30C8\u30C3\u30D7\\test\\code\\pokedexweb\\backend\\pokedexweb\\services\\pokemonservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{195D8347-7544-4089-BE90-DAFB061544C8}|PokedexWeb\\PokedexWeb.csproj|solutionrelative:pokedexweb\\services\\pokemonservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{195D8347-7544-4089-BE90-DAFB061544C8}|PokedexWeb\\PokedexWeb.csproj|c:\\users\\71791860\\onedrive - hitachi group\\\u30C7\u30B9\u30AF\u30C8\u30C3\u30D7\\test\\code\\pokedexweb\\backend\\pokedexweb\\controllers\\pokemoncontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{195D8347-7544-4089-BE90-DAFB061544C8}|PokedexWeb\\PokedexWeb.csproj|solutionrelative:pokedexweb\\controllers\\pokemoncontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{195D8347-7544-4089-BE90-DAFB061544C8}|PokedexWeb\\PokedexWeb.csproj|c:\\users\\71791860\\onedrive - hitachi group\\\u30C7\u30B9\u30AF\u30C8\u30C3\u30D7\\test\\code\\pokedexweb\\backend\\pokedexweb\\controllers\\typescontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{195D8347-7544-4089-BE90-DAFB061544C8}|PokedexWeb\\PokedexWeb.csproj|solutionrelative:pokedexweb\\controllers\\typescontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{195D8347-7544-4089-BE90-DAFB061544C8}|PokedexWeb\\PokedexWeb.csproj|c:\\users\\71791860\\onedrive - hitachi group\\\u30C7\u30B9\u30AF\u30C8\u30C3\u30D7\\test\\code\\pokedexweb\\backend\\pokedexweb\\controllers\\pokemoncontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{195D8347-7544-4089-BE90-DAFB061544C8}|PokedexWeb\\PokedexWeb.csproj|solutionrelative:pokedexweb\\controllers\\pokemoncontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{195D8347-7544-4089-BE90-DAFB061544C8}|PokedexWeb\\PokedexWeb.csproj|c:\\users\\71791860\\onedrive - hitachi group\\\u30C7\u30B9\u30AF\u30C8\u30C3\u30D7\\test\\code\\pokedexweb\\backend\\pokedexweb\\dtos\\pokemondto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
@@ -30,7 +26,7 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 2,
+          "SelectedChildIndex": 4,
           "Children": [
             {
               "$type": "Bookmark",
@@ -44,27 +40,14 @@
               "RelativeDocumentMoniker": "PokedexWeb\\Controllers\\TypesController.cs",
               "ToolTip": "C:\\Users\\71791860\\OneDrive - Hitachi Group\\\u30C7\u30B9\u30AF\u30C8\u30C3\u30D7\\Test\\Code\\PokedexWeb\\Backend\\PokedexWeb\\Controllers\\TypesController.cs",
               "RelativeToolTip": "PokedexWeb\\Controllers\\TypesController.cs",
-              "ViewState": "AgIAABIAAAAAAAAAAAAwwB8AAAAFAAAAAAAAAA==",
+              "ViewState": "AgIAABIAAAAAAAAAAAAwwBgAAAA1AAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2026-07-09T07:17:05.723Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 0,
-              "Title": "PokemonService.cs",
-              "DocumentMoniker": "C:\\Users\\71791860\\OneDrive - Hitachi Group\\\u30C7\u30B9\u30AF\u30C8\u30C3\u30D7\\Test\\Code\\PokedexWeb\\Backend\\PokedexWeb\\Services\\PokemonService.cs",
-              "RelativeDocumentMoniker": "PokedexWeb\\Services\\PokemonService.cs",
-              "ToolTip": "C:\\Users\\71791860\\OneDrive - Hitachi Group\\\u30C7\u30B9\u30AF\u30C8\u30C3\u30D7\\Test\\Code\\PokedexWeb\\Backend\\PokedexWeb\\Services\\PokemonService.cs",
-              "RelativeToolTip": "PokedexWeb\\Services\\PokemonService.cs",
-              "ViewState": "AgIAAIsAAAAAAAAAAAAAwJwAAAAaAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-06-26T01:28:20.835Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 3,
+              "DocumentIndex": 2,
               "Title": "PokemonDto.cs",
               "DocumentMoniker": "C:\\Users\\71791860\\OneDrive - Hitachi Group\\\u30C7\u30B9\u30AF\u30C8\u30C3\u30D7\\Test\\Code\\PokedexWeb\\Backend\\PokedexWeb\\Dtos\\PokemonDto.cs",
               "RelativeDocumentMoniker": "PokedexWeb\\Dtos\\PokemonDto.cs",
@@ -76,7 +59,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 4,
+              "DocumentIndex": 3,
               "Title": "index.html",
               "DocumentMoniker": "C:\\Users\\71791860\\OneDrive - Hitachi Group\\\u30C7\u30B9\u30AF\u30C8\u30C3\u30D7\\Test\\Code\\PokedexWeb\\Backend\\PokedexWeb\\wwwroot\\index.html",
               "RelativeDocumentMoniker": "PokedexWeb\\wwwroot\\index.html",
@@ -88,15 +71,16 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 2,
+              "DocumentIndex": 0,
               "Title": "PokemonController.cs",
               "DocumentMoniker": "C:\\Users\\71791860\\OneDrive - Hitachi Group\\\u30C7\u30B9\u30AF\u30C8\u30C3\u30D7\\Test\\Code\\PokedexWeb\\Backend\\PokedexWeb\\Controllers\\PokemonController.cs",
               "RelativeDocumentMoniker": "PokedexWeb\\Controllers\\PokemonController.cs",
               "ToolTip": "C:\\Users\\71791860\\OneDrive - Hitachi Group\\\u30C7\u30B9\u30AF\u30C8\u30C3\u30D7\\Test\\Code\\PokedexWeb\\Backend\\PokedexWeb\\Controllers\\PokemonController.cs",
               "RelativeToolTip": "PokedexWeb\\Controllers\\PokemonController.cs",
-              "ViewState": "AgIAAAYAAAAAAAAAAAAAABUAAAA0AAAAAAAAAA==",
+              "ViewState": "AgIAABMAAAAAAAAAAAAQwBcAAAAPAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-06-25T07:47:13.167Z"
+              "WhenOpened": "2026-06-25T07:47:13.167Z",
+              "EditorCaption": ""
             }
           ]
         }

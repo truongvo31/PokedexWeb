@@ -33,6 +33,7 @@ export const getCaptureTextColor = (
   string,
   'brand' | 'danger' | 'important' | 'informative' | 'severe' | 'subtle' | 'success' | 'warning',
 ] => {
+  if (rate == null) return ['Unknown', 'subtle'];
   if (rate >= 200) return [`Very Easy (${rate})`, 'success'];
   if (rate >= 150) return [`Easy (${rate})`, 'informative'];
   if (rate >= 100) return [`Medium (${rate})`, 'warning'];
@@ -48,6 +49,7 @@ export const getGenderRatioTextColor = (
   color: 'brand' | 'danger' | 'informative';
   rate?: number;
 }[] => {
+  if (genderRate == null) return [];
   if (genderRate === -1) return [{ gender: 'genderless', color: 'informative' }];
   const maleRate = (1 - genderRate / 8.0) * 100.0;
   const femaleRate = (genderRate / 8.0) * 100.0;

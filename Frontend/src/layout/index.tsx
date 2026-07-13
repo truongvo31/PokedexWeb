@@ -1,7 +1,9 @@
 import { Button, makeStyles, tokens } from '@fluentui/react-components';
 import { Navigation24Regular } from '@fluentui/react-icons';
-import { Link, Outlet } from 'react-router-dom';
+import { QueryClientProvider } from '@tanstack/react-query';
+import { Link, Outlet, ScrollRestoration } from 'react-router-dom';
 import Logo from '../assets/images/logo.png';
+import { queryClient } from '../plugins/queryClient';
 import SidebarProvider from '../providers/sidebarProvider';
 import useSidebar from '../stores/useSidebar';
 import AppSidebar from './components/appSidebar';
@@ -39,6 +41,7 @@ const LayoutContent = () => {
         <AppSidebar />
         <div className="flex-1">
           <Outlet />
+          <ScrollRestoration />
         </div>
       </main>
     </div>
@@ -47,9 +50,11 @@ const LayoutContent = () => {
 
 const DefaultLayout = () => {
   return (
-    <SidebarProvider>
-      <LayoutContent />
-    </SidebarProvider>
+    <QueryClientProvider client={queryClient}>
+      <SidebarProvider>
+        <LayoutContent />
+      </SidebarProvider>
+    </QueryClientProvider>
   );
 };
 

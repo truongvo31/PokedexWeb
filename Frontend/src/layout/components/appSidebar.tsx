@@ -10,6 +10,8 @@ import {
   type Slot,
 } from '@fluentui/react-components';
 import {
+  Fire20Filled,
+  Fire20Regular,
   Navigation24Regular,
   Settings20Filled,
   Settings20Regular,
@@ -30,6 +32,7 @@ type NavItem = {
   subItems?: Omit<NavItem, 'icon'>[];
 };
 
+const FireIcon = bundleIcon(Fire20Filled, Fire20Regular);
 const SettingsIcon = bundleIcon(Settings20Filled, Settings20Regular);
 
 const useFluentStyles = makeStyles({
@@ -61,6 +64,12 @@ const AppSidebar = () => {
         path: '/pokemon',
         label: 'Pokemons',
       },
+      {
+        name: 'Types',
+        icon: <FireIcon />,
+        path: '/types',
+        label: 'Types',
+      },
     ],
     // footer here
     [
@@ -79,15 +88,12 @@ const AppSidebar = () => {
     navItems.flat().find((item) => item.path?.toLowerCase() === getBasePath(location.pathname))
       ?.name || '';
 
-  useEffect(
-    () => {
-      if (isMobile && isMobileOpen && location.pathname) {
-        toggleMobileSidebar();
-      }
-    },
+  useEffect(() => {
+    if (isMobile && isMobileOpen && location.pathname) {
+      toggleMobileSidebar();
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [isMobile, location.pathname],
-  );
+  }, [isMobile, location.pathname]);
 
   return (
     <NavDrawer
