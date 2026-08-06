@@ -1,6 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using PokedexWeb.Data;
 using PokedexWeb.Services;
+using System.Threading.RateLimiting;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -21,6 +22,23 @@ builder.Services.AddCors(options =>
     });
 });
 
+builder.Services.AddRateLimiter(options =>
+{
+    options.RejectionStatusCode = StatusCodes.Status429TooManyRequests;
+
+    options.AddPolicy("SendMailPolicy", httpContext =>
+        RateLimitPartition.GetFixedWindowLimiter(
+            partitionKey: httpContext.Connection.RemoteIpAddress?.ToString() ?? "unknown",
+            factory: _ => new FixedWindowRateLimiterOptions
+            {
+                PermitLimit = 3,
+                Window = TimeSpan.FromMinutes(10),
+                QueueProcessingOrder = QueueProcessingOrder.OldestFirst,
+                QueueLimit = 0,
+                AutoReplenishment = true
+            }));
+});
+
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
 if (string.IsNullOrEmpty(connectionString)) 
     throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
@@ -30,6 +48,11 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 builder.Services.AddScoped<PokemonService>();
 builder.Services.AddScoped<TypeService>();
 builder.Services.AddScoped<EncounterService>();
+
+builder.Services.Configure<EmailService.EmailSettings>(
+    builder.Configuration.GetSection("EmailSettings")
+);
+builder.Services.AddScoped<EmailService>();
 
 var app = builder.Build();
 
